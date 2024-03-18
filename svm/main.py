@@ -23,21 +23,29 @@ species_name = list(SPECIES.keys())
 X = data.drop(['Species'], axis=1)
 y = data['Species'].map(SPECIES)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=100, test_size=0.3)
+# 使用PCA 降維成3 維
+pca = PCA(n_components=3)
+X_pca = pca.fit_transform(X)
 
-model = SVC(kernel='linear')
-model.fit(X_train, y_train)
+X_train, X_test, y_train, y_test = train_test_split(X_pca, y, random_state=100, test_size=0.3)
 
-y_pred = model.predict(X_test)
+model_pca = SVC(kernel='linear')
+model_pca.fit(X_train, y_train)
+
+y_pred = model_pca.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
 print('<accuracy> ', accuracy, end='\n\n')
 
 cm = confusion_matrix(y_test, y_pred)
-
+print("cm",cm)
 TP = np.diag(cm)
 FP = np.sum(cm, axis=0) - TP
 FN = np.sum(cm, axis=1) - TP
+
+print("TP : ",TP)
+print("FP : ",FP)
+print("FN : ",FN)
 
 precision = np.zeros(len(cm))
 recall = np.zeros(len(cm))
@@ -73,4 +81,32 @@ sns.heatmap(cm, annot=True, fmt='d')
 plt.xlabel('Predicted')
 plt.ylabel('True')
 plt.title('Confusion Matrix')
+plt.show()
+
+# 繪製決策邊界
+x_min, x_max = X_pca[:, 0].min() - 1, X_pca[:, 0].max() + 1
+y_min, y_max = X_pca[:, 1].min() - 1, X_pca[:, 1].max() + 1
+z_min, z_max = X_pca[:, 2].min() - 1, X_pca[:, 2].max() + 1
+
+# 指定生成的點的數量
+num_points = 50
+
+xx, yy, zz = np.meshgrid(
+    np.linspace(x_min, x_max, num_points),
+    np.linspace(y_min, y_max, num_points),
+    np.linspace(z_min, z_max, num_points)
+)
+grid = np.column_stack([xx.ravel(), yy.ravel(), zz.ravel()])
+Z = model_pca.predict(grid)
+Z = Z.reshape(xx.shape)
+
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter3D(X_pca[:, 0], X_pca[:, 1], X_pca[:, 2], c=y, edgecolors='k', cmap=plt.cm.Paired)
+
+ax.set_xlabel('Principal Component 1')
+ax.set_ylabel('Principal Component 2')
+ax.set_zlabel('Principal Component 3')
+plt.title('3D PCA with Labels')
+
 plt.show()
