@@ -13,6 +13,8 @@ weights = ['uniform', 'distance']
 algorithms = ['auto', 'ball_tree', 'kd_tree', 'brute']
 metrics = ['minkowski', 'euclidean', 'manhattan', 'chebyshev']
 
+print('[weight][algorithm][metric] <accuracy>')
+
 for weight in weights:
     for algorithm in algorithms:
         for metric in metrics:
@@ -22,4 +24,4 @@ for weight in weights:
             y_pred = model_pca.predict(X_test)
 
             accuracy = accuracy_score(y_test, y_pred)
-            print(f'[weight: {weight}][algorithm: {algorithm}][metric: {metric}]<accuracy> ', accuracy, end='\n\n')
+            print(f'[{weight}][{algorithm}][{metric}] <{accuracy}>')

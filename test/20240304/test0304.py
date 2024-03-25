@@ -7,7 +7,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import cross_val_predict
 
 
-df = pd.read_csv('20230304exam.csv')
+df = pd.read_csv('20240304exam.csv')
 
 # X = df[['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']]
 # X = df[['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I']]
