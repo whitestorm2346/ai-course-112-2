@@ -192,15 +192,15 @@ y_test = test_data['療程是否成效']
 
 # X_test = pca.fit_transform(X_test)
 
-get_accuracy = TestAccuracy(X_pca, y_train, X_test, y_test, 0.94)
+get_accuracy = TestAccuracy(X_train, y_train, X_test, y_test, 0.94)
 target_models = []
 
-# target_models += get_accuracy.get_linear_reg()
-# target_models += get_accuracy.get_logistic_reg()
-# target_models += get_accuracy.get_svm(max_degree=5) # very slow
-# target_models += get_accuracy.get_knn(max_n=5)
-# target_models += get_accuracy.get_dt(max_depth_range=25, min_samples_leaf_range=12)
-# target_models += get_accuracy.get_rf(max_estimator=100)
+target_models += get_accuracy.get_linear_reg()
+target_models += get_accuracy.get_logistic_reg()
+target_models += get_accuracy.get_svm(max_degree=10) # very slow
+target_models += get_accuracy.get_knn(max_n=5)
+target_models += get_accuracy.get_dt(max_depth_range=25, min_samples_leaf_range=12)
+target_models += get_accuracy.get_rf(max_estimator=100)
 
 
 for model in target_models:
