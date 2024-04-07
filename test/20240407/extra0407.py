@@ -6,6 +6,7 @@ from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, r2_score
 from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -17,7 +18,7 @@ class ModelInfo:
         self.accuracy = accuracy
 
 class TestAccuracy:
-    def __init__(self, X_train, y_train, X_test, y_test, target_accuracy=-1) -> None:
+    def __init__(self, X_train, y_train, X_test, y_test, target_accuracy=-1.0) -> None:
         self.X_train = X_train
         self.y_train = y_train
         self.X_test = X_test
@@ -175,30 +176,26 @@ class TestAccuracy:
 
 GENDER = {'女': 0, '男': 1}
 
-train_data = pd.read_csv('DT_dataset_1.csv')
-test_data = pd.read_csv('test_data.csv')
+train_data_set = pd.read_csv('DT_dataset_1.csv')
+test_data_set = pd.read_csv('test_data.csv')
 
-X_train = train_data.drop('療程是否成效', axis=1)
-X_train['性別'] = X_train['性別'].map(GENDER)
-y_train = train_data['療程是否成效']
+X = train_data_set.drop('療程是否成效', axis=1)
+X['性別'] = X['性別'].map(GENDER)
+y = train_data_set['療程是否成效']
 
-pca = PCA(n_components=3)
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=None, test_size=0.2)
 
-# X_train = pca.fit_transform(X_train)
-
-X_test = test_data.drop('療程是否成效', axis=1)
-X_test['性別'] = X_test['性別'].map(GENDER)
-y_test = test_data['療程是否成效']
-
-# X_test = pca.fit_transform(X_test)
+test_X = test_data_set.drop('療程是否成效', axis=1)
+test_X['性別'] = test_X['性別'].map(GENDER)
+test_y = test_data_set['療程是否成效']
 
 get_accuracy = TestAccuracy(X_train, y_train, X_test, y_test, 0.94)
 target_models = []
 
-target_models += get_accuracy.get_linear_reg()
-target_models += get_accuracy.get_logistic_reg()
-target_models += get_accuracy.get_svm(max_degree=10) # very slow
-target_models += get_accuracy.get_knn(max_n=5)
+# target_models += get_accuracy.get_linear_reg()
+# target_models += get_accuracy.get_logistic_reg()
+# target_models += get_accuracy.get_svm(max_degree=10) # very slow
+# target_models += get_accuracy.get_knn(max_n=5)
 target_models += get_accuracy.get_dt(max_depth_range=25, min_samples_leaf_range=12)
 target_models += get_accuracy.get_rf(max_estimator=100)
 
