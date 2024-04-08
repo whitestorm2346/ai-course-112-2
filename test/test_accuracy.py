@@ -140,25 +140,29 @@ class TestAccuracy:
 
                     if self.accuracy >= self.target_accuracy:
                         results.append(
-                            ModelInfo(f'[DecisionTree][criterion: {criterion}][max_depth: {max_depth}][min_samples_leaf: {min_samples_leaf}]'
-                                      , self.accuracy)
-                    )
+                            ModelInfo(
+                                f'[DecisionTree][criterion: {criterion}][max_depth: {max_depth}][min_samples_leaf: {min_samples_leaf}]',
+                                self.accuracy
+                            )
+                        )
 
         return results
 
     def get_rf(self, max_estimator=100) -> list[ModelInfo]:
+        criterions = ['gini', 'entropy']
         results = []
 
-        for estimator in range(2, max_estimator + 1):
-            self.model = RandomForestClassifier(n_estimators=estimator)
-            self.model.fit(self.X_train, self.y_train)
+        for criterion in criterions:
+            for estimator in range(2, max_estimator + 1):
+                self.model = RandomForestClassifier(n_estimators=estimator, criterion=criterion)
+                self.model.fit(self.X_train, self.y_train)
 
-            self.y_pred = self.model.predict(self.X_test)
-            self.accuracy = accuracy_score(self.y_pred, self.y_test)
+                self.y_pred = self.model.predict(self.X_test)
+                self.accuracy = accuracy_score(self.y_pred, self.y_test)
 
-            print('<accuracy>', self.accuracy, end='\r')
+                print('<accuracy>', self.accuracy, end='\r')
 
-            if self.accuracy > self.target_accuracy:
-                results.append(ModelInfo(f'[RandomForest][n_estimators: {estimator}]', self.accuracy))
+                if self.accuracy > self.target_accuracy:
+                    results.append(ModelInfo(f'[RandomForest][criterion: {criterion}][n_estimators: {estimator}]', self.accuracy))
 
         return results
