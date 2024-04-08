@@ -1,6 +1,7 @@
 import pandas as pd
 
-data = pd.read_csv('iris_miss.csv')
+# data = pd.read_csv('iris_miss.csv')
+data = pd.read_csv('iris_miss_test.csv')
 
 missing_values = data.isnull()
 missing_per_feature = missing_values.sum()

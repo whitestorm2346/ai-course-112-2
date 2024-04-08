@@ -1,7 +1,10 @@
 import pandas as pd
 
-data = pd.read_csv('iris_abnormal.csv')
-threshold = 4
+# data = pd.read_csv('iris_abnormal.csv')
+# threshold = 4
+
+data = pd.read_csv('iris_abnormal_test.csv')
+threshold = 2.5
 
 abnormal_values = data[(data - data.mean()).abs() > threshold * data.std()]
 abnormal_per_feature = abnormal_values.count()
