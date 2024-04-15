@@ -25,15 +25,6 @@ while True:
     # 分割資料集為訓練集和測試集
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=None)
     
-    # 初始化線性回歸模型
-    model = LinearRegression()
-    
-    # 訓練模型
-    model.fit(X_train, y_train)
-    
-    # 在測試集上進行預測
-    y_pred = model.predict(X_test)
-    
     # 添加截距項
     X_train = sm.add_constant(X_train)
     X_test = sm.add_constant(X_test)

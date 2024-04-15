@@ -4,6 +4,7 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, r2_score
 
 
 class ModelInfo:
@@ -12,7 +13,7 @@ class ModelInfo:
         self.accuracy = accuracy
 
 class TestAccuracy:
-    def __init__(self, X_train, y_train, X_test, y_test, target_accuracy=-1.0) -> None:
+    def __init__(self, X_train, y_train, X_test, y_test, target_accuracy=-1) -> None:
         self.X_train = X_train
         self.y_train = y_train
         self.X_test = X_test
